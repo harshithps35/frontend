@@ -71,7 +71,11 @@ const Login = () => {
       }
       navigate('/address');
     } catch (err) {
-      setError(err.response?.data?.message || 'Something went wrong. Try again.');
+      console.error('Auth error:', err);
+      const serverMsg = err?.response?.data?.message;
+      const status = err?.response?.status;
+      const clientMsg = err?.message;
+      setError(serverMsg || (status ? `Request failed (${status})` : clientMsg) || 'Something went wrong. Try again.');
     } finally {
       setLoading(false);
     }
