@@ -123,7 +123,7 @@ const AIPrediction = ({ userArea }) => {
   const [activeResultTab, setActiveResultTab] = useState('recommendations');
 
   useEffect(() => {
-    axios.get('/api/predictions/stagnation-zones')
+    axios.get('/predictions/stagnation-zones')
       .then(res => setStagnation(res.data))
       .catch(() => {});
     // Auto-run analysis on load
@@ -134,7 +134,7 @@ const AIPrediction = ({ userArea }) => {
     if (e) e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post('/api/predictions/analyze', form);
+      const res = await axios.post('/predictions/analyze', form);
       setResult(res.data);
       setActiveResultTab('recommendations');
     } catch (err) {

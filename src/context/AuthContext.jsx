@@ -1,21 +1,8 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
+import { API_BASE_URL } from '../config/api';
 
-const rawApiUrl = import.meta.env.VITE_API_URL;
-const normalizeBase = (u) => {
-  if (!u) return 'http://localhost:5000';
-  try {
-    // remove trailing slash(es)
-    let s = u.replace(/\/+$/g, '');
-    // if the url ends with /api, strip it so callers using '/api/..' still work
-    s = s.replace(/\/api$/i, '');
-    return s;
-  } catch (e) {
-    return 'http://localhost:5000';
-  }
-};
-
-axios.defaults.baseURL = normalizeBase(rawApiUrl);
+axios.defaults.baseURL = API_BASE_URL;
 
 const AuthContext = createContext(null);
 
@@ -34,7 +21,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (email, password) => {
-    const res = await axios.post('/api/auth/login', { email, password });
+    const res = await axios.post('/auth/login', { email, password });
     const userData = res.data;
     setUser(userData);
     localStorage.setItem('aquasense_user', JSON.stringify(userData));
@@ -43,7 +30,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const register = async (name, email, password) => {
-    const res = await axios.post('/api/auth/register', { name, email, password });
+    const res = await axios.post('/auth/register', { name, email, password });
     const userData = res.data;
     setUser(userData);
     localStorage.setItem('aquasense_user', JSON.stringify(userData));
@@ -52,7 +39,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const saveLocation = async (area, lat, lng) => {
-    const res = await axios.put('/api/auth/location', { area, lat, lng });
+    const res = await axios.put('/auth/location', { area, lat, lng });
     const updated = { ...user, area: res.data.area, lat: res.data.lat, lng: res.data.lng };
     setUser(updated);
     localStorage.setItem('aquasense_user', JSON.stringify(updated));

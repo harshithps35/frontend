@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import { API_BASE_URL } from '../config/api';
 import Navbar from '../components/Navbar';
 import MapView from '../components/MapView';
 import SensorCards from '../components/SensorCards';
@@ -27,9 +28,9 @@ const Dashboard = () => {
     const fetchData = async () => {
       try {
         const [sensorsRes, zonesRes, statsRes] = await Promise.all([
-          axios.get('/api/sensors'),
-          axios.get('/api/zones'),
-          axios.get('/api/sensors/stats/summary'),
+          axios.get('/sensors'),
+          axios.get('/zones'),
+          axios.get('/sensors/stats/summary'),
         ]);
         setSensors(sensorsRes.data);
         setZones(zonesRes.data);
@@ -45,7 +46,7 @@ const Dashboard = () => {
     // Poll for live sensor updates every 12 seconds
     const interval = setInterval(async () => {
       try {
-        const res = await axios.get('/api/sensors');
+        const res = await axios.get('/sensors');
         setSensors(res.data);
       } catch (_) {}
     }, 12000);
