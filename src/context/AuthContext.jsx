@@ -1,7 +1,21 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
-axios.defaults.baseURL = 'https://backend29-03-2026.onrender.com';
+const rawApiUrl = import.meta.env.VITE_API_URL;
+const normalizeBase = (u) => {
+  if (!u) return 'http://localhost:5000';
+  try {
+    // remove trailing slash(es)
+    let s = u.replace(/\/+$/g, '');
+    // if the url ends with /api, strip it so callers using '/api/..' still work
+    s = s.replace(/\/api$/i, '');
+    return s;
+  } catch (e) {
+    return 'http://localhost:5000';
+  }
+};
+
+axios.defaults.baseURL = normalizeBase(rawApiUrl);
 
 const AuthContext = createContext(null);
 
